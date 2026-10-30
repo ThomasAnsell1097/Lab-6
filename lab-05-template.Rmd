@@ -99,8 +99,8 @@ candy_df <- candy_df %>%
 Complete the following code to get the data viz to represent "how many candies contain caramel via bar plot". Fill in the blanks, remove the # symbol in front of your code and the execute the code chunk via green play button.
 
 ```{r}
-# ggplot(candy_rankings, aes(x = ______)) +
-#  _____() +
+ggplot(candy_rankings, aes(x = caramel)) +
+  geom_bar()
 ```
 
 ## Exercise 3
@@ -108,8 +108,13 @@ Complete the following code to get the data viz to represent "how many candies c
 Now look at a numerical variable, such as `winpercent`. Create an histogram for this variable using ggplot2 functions below. Include informative x and y labels and a title, as a good practice.
 
 ```{r}
-# Your code here
-
+ggplot(candy_rankings, aes(x = winpercent)) +
+  geom_histogram(bins = 20) +
+  labs(
+    title = "Distribution of Win Percentage Among Candies",
+    x = "Win percentage (%)",
+    y = "Number of candies"
+  )
 ```
 
 
@@ -122,11 +127,9 @@ How about using the both variables; chocolate vs winpercent? Run the following i
 Fill in the blanks, remove the # symbol in front of your code and the execute the code chunk via green play button.
 
 ```{r}
-# Your code here
-#ggplot(candy_df, aes(x = ___________)) +
-#  geom_histogram() +
-#  facet_wrap(___________)
-
+ggplot(candy_df, aes(x = winpercent)) +
+  geom_histogram() +
+  facet_wrap(~ chocolate)
 ```
 
 
@@ -137,7 +140,13 @@ Fill in the blanks, remove the # symbol in front of your code and the execute th
 Create a visualization that examines the relationship between a candy’s win percentage and whether it contains chocolate. Include x and y labels and a title. Describe any relationship you see.
 
 ```{r}
-# your code here
+ggplot(candy_rankings, aes(x = chocolate, y = winpercent)) +
+  geom_boxplot() +
+  labs(
+    title = "Win Percentage of Candies With and Without Chocolate",
+    x = "Contains chocolate",
+    y = "Win percentage (%)"
+  )
 
 ```
 
@@ -160,7 +169,14 @@ candy_rankings %>%
 Do more expensive candies win more often? Make a scatterplot of pricepercent (x) against winpercent (y). Describe their relationship.  
 
 ```{r}
-# your code here
+ggplot(candy_rankings, aes(x = pricepercent, y = winpercent)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(
+    title = "Win Percentage vs Price Percentile of Candies",
+    x = "Price percentile (pricepercent)",
+    y = "Win percentage (%)"
+  )
 
 ```
 
@@ -174,7 +190,14 @@ Do more expensive candies win more often? Make a scatterplot of pricepercent (x)
 Are chocolate candies more likely to be candy bars? Make a filled bar plot with chocolate on the x-axis and fill = bar. Describe what you see.
 
 ```{r}
-# Your code here
+ggplot(candy_rankings, aes(x = chocolate, fill = bar)) +
+  geom_bar(position = "fill") +
+  labs(
+    title = "Proportion of Candy Bars Among Chocolate and Non-Chocolate Candies",
+    x = "Contains chocolate",
+    y = "Proportion of candies",
+    fill = "Is a candy bar"
+  )
 
 ```
 
@@ -183,7 +206,18 @@ Are chocolate candies more likely to be candy bars? Make a filled bar plot with 
 Create a new variable called price per sugar ratio as the division of pricepercent and sugarpercent. Plot it against winpercent, and set the color of all points to blue for the competitors who are not "One dime" or "One quarter". Include x and y labels and a title. Describe any relationship you see.
 
 ```{r}
-# your code here
+candy_rankings %>%
+  mutate(price_per_sugar = pricepercent / sugarpercent) %>%
+  ggplot(aes(x = price_per_sugar, y = winpercent)) +
+  geom_point(aes(colour = competitorname %in% c("One dime", "One quarter"))) +
+  scale_colour_manual(values = c("FALSE" = "blue", "TRUE" = "red"),
+                      labels = c("FALSE" = "Other candies", "TRUE" = "One dime / One quarter")) +
+  labs(
+    title = "Win Percentage vs Price per Sugar Ratio",
+    x = "Price per sugar ratio (pricepercent / sugarpercent)",
+    y = "Win percentage (%)",
+    colour = NULL
+  )
 
 ```
 
